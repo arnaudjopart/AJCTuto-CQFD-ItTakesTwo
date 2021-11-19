@@ -20,6 +20,7 @@ public class GameSetup : MonoBehaviour
         playerSetup.SetCameraLayer(m_playerCameraLayer[m_playerIndex]);
         playerSetup.SetCameraCulling(m_playerCameraLayer[m_playerIndex]);
         playerSetup.SetPlayerStartPosition(m_startPositions[m_playerIndex]);
+        playerSetup.SetPlayerInputIndex(m_playerIndex);
 
         m_playerIndex++; 
     }

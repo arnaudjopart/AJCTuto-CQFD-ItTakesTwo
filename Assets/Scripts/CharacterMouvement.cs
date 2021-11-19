@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class CharacterMouvement : MonoBehaviour
 {
-    private Animator m_animator;
+    
 
     private float velocity;
 
@@ -28,13 +28,14 @@ public class CharacterMouvement : MonoBehaviour
     private float aimVelocityX;
     private float aimVelocityZ;
 
-    private RigManipulator m_rigManipulator;
+    public RigManipulator m_rigManipulator;
+    public Animator m_animator;
+    
     private Vector2 m_moveVector;
 
     void Awake()
     {
-        m_animator = GetComponent<Animator>();
-        m_rigManipulator = GetComponent<RigManipulator>();
+        
     }
 
     public void SwitchToAim(InputAction.CallbackContext _context)

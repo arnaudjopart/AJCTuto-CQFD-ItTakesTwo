@@ -394,8 +394,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_startPositions:
-  - {fileID: 1723055112}
   - {fileID: 517955746}
+  - {fileID: 1723055112}
   m_playerMaterials:
   - {fileID: 2100000, guid: 51969af61e3109349b353dcca85e3199, type: 2}
   - {fileID: 2100000, guid: 571c0b79a1447e544bdc6b375cd3b8a5, type: 2}

@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 
 public class PlayerSetup : MonoBehaviour
@@ -7,6 +8,8 @@ public class PlayerSetup : MonoBehaviour
     public Camera m_mainCamera;
 
     public GameObject[] m_cameras;
+    public CinemachineInputProvider[] m_cinemachineInputProviders;
+    
     private Vector3 m_startPosition;
     private bool m_hasStartPositionBeenApplied;
 
@@ -44,6 +47,14 @@ public class PlayerSetup : MonoBehaviour
         {
             m_hasStartPositionBeenApplied = true;
             transform.parent.position = m_startPosition;
+        }
+    }
+
+    public void SetPlayerInputIndex(int playerIndex)
+    {
+        foreach (var inputProvider in m_cinemachineInputProviders)
+        {
+            inputProvider.PlayerIndex = playerIndex;
         }
     }
 }
