@@ -7,9 +7,7 @@ using UnityEngine.InputSystem;
 
 public class CharacterMouvement : MonoBehaviour
 {
-    private CustomControllers m_controls;
-
-    private Animator m_animator;
+    
 
     private float velocity;
 
@@ -30,20 +28,30 @@ public class CharacterMouvement : MonoBehaviour
     private float aimVelocityX;
     private float aimVelocityZ;
 
-    private RigManipulator m_rigManipulator;
+    public RigManipulator m_rigManipulator;
+    public Animator m_animator;
+    
+    private Vector2 m_moveVector;
 
     void Awake()
     {
-        m_controls = new CustomControllers();
-        m_animator = GetComponent<Animator>();
-        m_rigManipulator = GetComponent<RigManipulator>();
-
-        m_controls.Mouvement.SwitchToAim.started += SwitchToAimState;
-        m_controls.Mouvement.SwitchToAim.canceled += SwitchToDefaultState;
         
     }
 
-    private void SwitchToDefaultState(InputAction.CallbackContext _obj)
+    public void SwitchToAim(InputAction.CallbackContext _context)
+    {
+        if (_context.started)
+        {
+            SwitchToAimState();
+        }
+
+        if (_context.canceled)
+        {
+            SwitchToDefaultState();
+        }
+    }
+
+    private void SwitchToDefaultState()
     {
         m_currentState = STATE.DEFAULT;
         m_animator.SetBool("SwitchToAimBool",false);
@@ -51,7 +59,7 @@ public class CharacterMouvement : MonoBehaviour
         m_rigManipulator.DeactivateAimingRig();
     }
 
-    private void SwitchToAimState(InputAction.CallbackContext _obj)
+    private void SwitchToAimState()
     {
         m_currentState = STATE.AIMING;
         m_animator.SetBool("SwitchToAimBool",true);
@@ -59,15 +67,11 @@ public class CharacterMouvement : MonoBehaviour
         m_rigManipulator.ActivateAimingRig();
     }
 
-    private void OnEnable()
+    public void Move(InputAction.CallbackContext _context)
     {
-        m_controls.Enable();
+        m_moveVector = _context.ReadValue<Vector2>();
     }
-
-    private void OnDisable()
-    {
-        m_controls.Disable();
-    }
+    
 
     // Update is called once per frame
     void Update()
@@ -76,8 +80,8 @@ public class CharacterMouvement : MonoBehaviour
         switch (m_currentState)
         {
             case STATE.DEFAULT:
-                
-                var value = m_controls.Mouvement.Move.ReadValue<Vector2>();
+
+                var value = m_moveVector;
 
                 var speed = Mathf.Abs(value.x) + Mathf.Abs(value.y);
                 speed = Mathf.Clamp(speed, 0f, 1f);
@@ -101,7 +105,7 @@ public class CharacterMouvement : MonoBehaviour
                 var forwardCameraOnXZplane = Vector3.ProjectOnPlane(currentCameraForward, Vector3.up);
                 transform.rotation = Quaternion.LookRotation(forwardCameraOnXZplane, Vector3.up);
 
-                var inputValue = m_controls.Mouvement.Move.ReadValue<Vector2>();
+                var inputValue = m_moveVector;
                 var inputValueX = Mathf.SmoothDamp(m_animator.GetFloat("SpeedAimX"), inputValue.x, ref aimVelocityX, .1f);
                 var inputValueZ = Mathf.SmoothDamp(m_animator.GetFloat("SpeedAimZ"), inputValue.y, ref aimVelocityZ, .1f);
                 
